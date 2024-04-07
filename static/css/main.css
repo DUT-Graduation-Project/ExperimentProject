@@ -1,0 +1,415 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  box-sizing: border-box;
+}
+
+:root {
+  --background-gradient: linear-gradient(178deg, #ffff33 10%, #3333ff);
+  --gray: #34495e;
+  --darkgray: #2c3e50;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+}
+
+
+.header {
+  height: 100%;
+  width: 100%;
+  background-color: #ffffff;
+  padding: 16px 32px;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search {
+  padding-left: 12px;
+  width: 80%;
+  border: 2px solid #CF5C3F;
+  overflow: auto;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+
+.search input[type="text"] {
+  border: 0px;
+  width: 67%;
+  padding: 10px 10px;
+}
+
+.container-search {
+  display: flex;
+  align-items: center;
+}
+
+.search input[type="text"]:focus {
+  outline: 0;
+}
+
+.label-search {
+  color: #CF5C3F;
+  font-size: 1.4rem;
+  padding-right: 12px;
+}
+
+.button-submit {
+  border: 0px;
+  background: none;
+  background-color: #CF5C3F;
+  color: #fff;
+  float: right;
+
+  padding: 10px;
+  border-radius-top-right: 5px;
+  -moz-border-radius-top-right: 5px;
+  -webkit-border-radius-top-right: 5px;
+  border-radius-bottom-right: 5px;
+  -moz-border-radius-bottom-right: 5px;
+  -webkit-border-radius-bottom-right: 5px;
+  cursor: pointer;
+}
+
+.navbar_1 {
+  padding: 8px 16px;
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 20px;
+  border-bottom: 1px solid #ccc;
+}
+
+
+.navbar_2 {
+  padding: 8px 16px;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 20px;
+  border-bottom: 1px solid #ccc;
+}
+
+.save_image {
+  height: 100%;
+  align-items: center;
+  display: flex;
+}
+
+.custom-btn {
+  padding: 8px 6px;
+  outline: none;
+  background-color: #CF5C3F;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: #fff;
+}
+
+
+
+
+
+
+
+.num_querry {
+  background-color: bdc0c5;
+  padding-left: 49px;
+}
+
+.num_querry label {
+  font-size: 18px;
+}
+
+.num_querry input {
+  width: 45px;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  margin: 5px 5px 0 5px;
+  padding-left: 4%;
+  border: 2px solid #CF5C3F;
+  outline: none;
+  font-size: 13px;
+}
+
+.num_querry button {
+  width: 80px;
+  height: 40px;
+  color: white;
+  background-color: #CF5C3F;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.item-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  gap: 20px;
+  padding: 2rem 5rem;
+}
+
+.item-card {
+  height: 400px;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.img-container {
+  position: relative;
+  height: 80%;
+  display: block;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  width: 100%;
+  cursor: pointer;
+}
+
+.button {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 180px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity .35s ease;
+}
+
+.button_2{
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 100px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity .35s ease;
+}
+
+.button a {
+  width: 200px;
+  padding: 12px 24px;
+  border-radius: 12px;
+  text-align: center;
+  color: #fff;
+  background-color: #CF5C3F;
+  text-decoration: none;
+  font-size: 1.4rem;
+  font-weight: 400;
+  z-index: 1;
+}
+
+.button_2 a {
+  width: 200px;
+  padding: 12px 24px;
+  border-radius: 12px;
+  text-align: center;
+  color: #fff;
+  background-color: #CF5C3F;
+  text-decoration: none;
+  font-size: 1.4rem;
+  font-weight: 400;
+  z-index: 1;
+}
+
+.img-container:hover .button {
+  opacity: 1;
+}
+
+.img-container:hover .button_2 {
+  opacity: 1;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.5s ease;
+}
+
+.img-container:hover .overlay {
+  display: block;
+  background: rgba(0, 0, 0, .3);
+}
+
+.img {
+  height: 100%;
+  width: 100%;
+  transition: transform 0.3s ease;
+
+}
+
+.img:hover {
+  transform: scale(1.1);
+  /* Phóng to ảnh lên 1.2 lần */
+}
+
+.body-item {
+  width: 100%;
+  display: flex;
+  padding: 12px;
+  align-items: center;
+  height: 20%;
+}
+
+.title {
+  color: #000;
+  line-height: 1.7rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+
+
+
+.Pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+}
+
+.Pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+}
+
+.PageNumber {
+  padding: 6px 12px;
+  cursor: pointer;
+  background-color: #CF5C3F;
+  color: white;
+  font-weight: 400;
+  border-radius: 6px;
+}
+
+/* ===========================
+   ====== Medua Query for Search Box ====== 
+   =========================== */
+
+@media only screen and (min-width : 780px) and (max-width: 1200px) {
+  .item-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 20px;
+    padding: 8px 16px;
+  }
+
+  .navbar_2 {
+    padding: 8px 16px;
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 20px;
+  }
+
+  .navbar_1 {
+    padding: 8px 16px;
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 20px;
+  }
+}
+
+@media only screen and (min-width : 150px) and (max-width : 780px) {
+  .logo {
+    display: none;
+  }
+
+  .item-container {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 20px;
+    padding: 8px 16px;
+  }
+
+  .navbar_2 {
+    padding: 8px 16px;
+    display: grid;
+    grid-template-columns: auto;
+    gap: 20px;
+    overflow: hidden;
+  }
+
+  .navbar_1 {
+    padding: 8px 16px;
+    display: grid;
+    grid-template-columns: auto;
+    gap: 20px;
+  }
+
+  .search {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+}
+
+
+#dropdown {
+  background-color: #CF5C3F;
+  width: 200px;
+  font-size: 16px;
+  padding: 5px;
+  max-height: 400px;
+  position: absolute;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  z-index: 9999;
+  overflow-y: auto; /* Thêm thanh cuộn khi nội dung vượt quá max-height */
+}
+
+.dropdown-item {
+
+  display: block;
+  text-decoration: none;
+  text-align: center;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-top: 2px;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(0, 204, 255, 0.459);
+}
+
+#input {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+#toggle {
+  margin: auto;
+  width: 200px;
+  font-size: 1.4rem;
+  background-color: #CF5C3F;
+  color: #fff;
+  padding: 8px 6px;
+  border-radius: 6px;
+  
+}

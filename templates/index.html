@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">Logo</div>
+      <div class="search">
+        <form action="/text-search" method="post" class="search-form">
+          <i class="fa fa-search" aria-hidden="true"></i>
+          <input type="text" placeholder="Text Search" id="search_text" name="search_text" value="{{ search_text }}" />
+          <button type="submit" class="button-submit">Text Search</button>
+        </form>
+      </div>
+    </div>
+    <div class="navbar_2">
+      <div class="container-search">
+        <label class="label-search">OCR search</label>
+
+        <div class="search">
+          <form class="search-form">
+            <i class="fa fa-search" aria-hidden="true"></i>
+            <input type="text" placeholder="OCR Search" id="ocr_text" name="ocr_text" value="{{ ocr_text }}" />
+            <button onclick="sendAllForSubmitWithOCR()" type="button" class="button-submit">OCR Search</button>
+          </form>
+        </div>
+      </div>
+      <div class="search-fillter">
+        <button id="toggle">Search select</button>
+        <div id="dropdown">
+          <input type="text" id="input" placeholder="Search device ...">
+        </div>
+      </div>
+      <div class="save_image">
+        <button id="sendAllButton" onclick="sendAllForSubmit()" class="custom-btn">Submit path</button>
+      </div>
+      <div class="save_image">
+        <button id="sendAllButton" onclick="sendAllForObjectDetection()" class="custom-btn">Object Detection</button>
+      </div>
+    </div>
+    <div class="container">
+      <div class="item-container">
+        <!-- listing card -->
+        {% block content %} {% for url, title in image_lst %}
+        <div class="item-card">
+
+          <div class="img-container">
+            <img src="http://127.0.0.1:5000/{{url}}" alt="Listing" class="img" />
+            <div class="overlay"></div>
+            <div class="button" onclick="redirectToImageSearch('{{url}}')"><a href="#">similarity</a></div>
+            <div class="button_2" onclick="redirectToSegmentSearch('{{url}}')"><a href="#">segment</a></div>
+
+          </div>
+          <div class="body-item">
+            <h2 class="title">{{title}}</h2>
+          </div>
+        </div>
+        {% endfor %} {% endblock %}
+
+
+      </div>
+    </div>
+    <div class="container">
+      <div class="Pagination-container">
+        <div class="Pagination">
+
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+
+  <script>
+    const itemContainer = document.querySelector('.item-container');
+
+
+    //phân trang
+    const itemsPerPage = 100; // Số lượng item-card trên mỗi trang
+    const itemCards = document.querySelectorAll('.item-card');
+
+    function redirectToSegmentSearch(path) {
+      const redirectPath = `/segment-search/?image-path=${path}`;
+      fetch(redirectPath)
+        .then(response => response.text())
+        .then(data => {
+          console.log(data)
+          // Cập nhật nội dung trang web với dữ liệu mới
+          document.body.innerHTML = data;
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+    function redirectToImageSearch(path) {
+      // Tạo đường dẫn chuyển hướng với tham số
+      const redirectPath = `/image-search/?image-path=${path}`;
+
+      // Sử dụng AJAX để lấy dữ liệu mới từ máy chủ
+      fetch(redirectPath)
+        .then(response => response.text())
+        .then(data => {
+          // Cập nhật nội dung trang web với dữ liệu mới
+          document.body.innerHTML = data;
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+
+    function showPage(pageNumber) {
+      itemCards.forEach((item, index) => {
+        if (index >= (pageNumber - 1) * itemsPerPage && index < pageNumber * itemsPerPage) {
+          item.style.display = 'block'; // Hiển thị item-card nếu nằm trong phạm vi trang hiện tại
+        } else {
+          item.style.display = 'none'; // Ẩn item-card nếu nằm ngoài phạm vi trang hiện tại
+        }
+      });
+    }
+
+    function createPagination() {
+      const totalPages = Math.ceil(itemCards.length / itemsPerPage);
+      const paginationContainer = document.querySelector('.Pagination');
+
+      for (let i = 1; i <= totalPages; i++) {
+        const pageNumber = document.createElement('div');
+        pageNumber.textContent = i;
+        pageNumber.classList.add('PageNumber');
+        pageNumber.addEventListener('click', () => {
+          showPage(i);
+        });
+        paginationContainer.appendChild(pageNumber);
+      }
+    }
+
+    var devices = [
+      {
+        "key": "a",
+        "value": "car"
+      }
+    ]
+    function filterDropDown(button, dropdown, input, items) {
+      //create dropdown items from list of items
+      for (let i = 0; i < items.length; i++) {
+        let dropdown_item = document.createElement('a');
+        dropdown_item.setAttribute('href', 'localhost:5000/object-detection/' + items[i].value);
+        dropdown_item.setAttribute('class', 'dropdown-item');
+        dropdown_item.innerHTML = items[i].value;
+        dropdown_item.addEventListener('click', function () {
+          // Set the input value to the selected item's key
+          input.value = items[i].key;
+          // Hide the dropdown
+          dropdown.style.display = 'none';
+
+          const redirectPath = `/object-detection/?object=${items[i].key}`;
+
+          // Redirect to the /api/image_search with the selected key
+          fetch(redirectPath)
+            .then(response => response.text())
+            .then(data => {
+              // Cập nhật nội dung trang web với dữ liệu mới
+              document.body.innerHTML = data;
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+          window.location.href = '/object-detection?object=' + items[i].key;
+        });
+        dropdown.appendChild(dropdown_item);
+      }
+      //hide the dropdown list
+      dropdown.style.display = 'none';
+
+      //make the button toggle the display of dropdown
+      button.addEventListener('click', function () {
+        if (dropdown.style.display == 'none')
+          dropdown.style.display = 'block';
+        else
+          dropdown.style.display = 'none';
+      });
+
+      input.addEventListener('input', function () {
+        let dropdown_items = dropdown.querySelectorAll('.dropdown-item');
+        if (!dropdown_items)
+          return false;
+        for (let i = 0; i < dropdown_items.length; i++) {
+          if (dropdown_items[i].innerHTML.toUpperCase().includes(input.value.toUpperCase()))
+            dropdown_items[i].style.display = 'block';
+          else
+            dropdown_items[i].style.display = 'none';
+        }
+      });
+    }
+
+
+    //Call filterDropDown function
+    /*filterDropDown(
+      document.getElementById('toggle'),
+      document.getElementById('dropdown'),
+      document.getElementById('input'),
+      devices
+    )*/
+
+
+    function sendAllForSubmit() {
+      var selectedUrls = [];
+
+      var imageElements = document.getElementsByClassName("title");
+
+      for (var i = 0; i < imageElements.length; i++) {
+        var imageTitle = imageElements[i].innerHTML;
+        selectedUrls.push(imageTitle);
+      }
+
+      console.log(selectedUrls);
+
+      fetch('http://127.0.0.1:5000/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(selectedUrls)
+      })
+        .then(response => {
+          if (response.ok) {
+            return response.text();
+          } else {
+            throw new Error('Network response was not ok');
+          }
+        })
+        .then(data => {
+          // Xử lý kết quả từ máy chủ nếu cần
+          alert('Success');
+        })
+        .catch(error => {
+          // Xử lý lỗi nếu yêu cầu thất bại
+          alert('Failed: ' + error.message);
+        });
+
+    }
+
+    function sendAllForSubmitWithOCR() {
+      var selectedUrls = [];
+      var imageElements = document.getElementsByClassName("title");
+      var dataInput = document.getElementById("ocr_text").value;
+      console.log(dataInput)
+      for (var i = 0; i < imageElements.length; i++) {
+        var imageTitle = imageElements[i].innerHTML;
+        selectedUrls.push(imageTitle);
+      }
+
+      console.log(selectedUrls);
+
+      fetch(`http://127.0.0.1:5000/ocr-search/?text=${dataInput}`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(selectedUrls)
+      }).then(response => response.text()).then((data) => {
+        console.log(data)
+        document.body.innerHTML = data;
+      });
+    }
+    function sendAllForObjectDetection() {
+      var selectedUrls = [];
+      var object = document.getElementById('input').value;
+
+      var imageElements = document.getElementsByClassName("title");
+
+      for (var i = 0; i < imageElements.length; i++) {
+        var imageTitle = imageElements[i].innerHTML;
+        selectedUrls.push(imageTitle);
+      }
+
+      const redirectPath = `http://127.0.0.1:5000/object-detection/?object=${object}`;
+
+      fetch(redirectPath, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(selectedUrls)
+      }).then(response => response.text()).then((data) => {
+        console.log(data)
+        document.body.innerHTML = data;
+      });
+
+    }
+
+
+
+    // Mặc định, hiển thị trang đầu tiên
+    showPage(1);
+
+    // Tạo phân trang
+    createPagination();
+
+  </script>
+</body>
+
+</html>
